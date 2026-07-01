@@ -8,3 +8,14 @@ enum UserRole {
     USER
     ADMIN
 }
+
+enum PostStatus {
+    DRAFT
+    PUBLISHED
+    ARCHIVED
+}
+
+enum CommentStatus {
+    APPROVED
+    REJECCT
+}

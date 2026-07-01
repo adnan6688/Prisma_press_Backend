@@ -4,6 +4,9 @@ import cors from 'cors'
 import config from "./config";
 const app: Application = express();
 import { userRoutes } from "./modules/users/users.route";
+import { AuthRoutes } from "./modules/auth/auth.routes";
+import { postRoutes } from "./modules/post/post.route";
+import { commentRoutes } from "./modules/comments/comments.route";
 
 
 
@@ -16,8 +19,9 @@ app.use(cors({
 }))
 
 app.use('/api/user', userRoutes)
-
-
+app.use('/api/auth' , AuthRoutes)
+app.use('/api/posts' , postRoutes)
+app.use('/api/comments' , commentRoutes)
 
 
 

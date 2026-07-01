@@ -1,32 +1,61 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import httpStatus from 'http-status'
 import { userService } from "./users.service";
+import { catchAsync } from "../../utils/catchAsync";
+import { sendResponse } from "../../utils/sendResponse";
+import config from "../../config";
+import { jwtUtils } from "../../utils/jwt";
+import { JwtPayload } from "jsonwebtoken";
 
 
 const register = async (req: Request, res: Response) => {
 
-    try{
-        const user = await userService.register(req.body)
+    const user = await userService.register(req.body)
 
-    res.status(httpStatus.CREATED).json({
+
+
+    sendResponse(res, {
         message: 'User Register Successfully!',
         success: true,
         statusCode: httpStatus.CREATED,
-        data: {
-            user
-        }
+        data: user
     })
-    }catch(error){
-        console.log(error)
-        res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-            success : false , 
-            message :'Failed to register user', 
-            error : (error as Error).message 
-        })
-    }
+
 }
 
 
+const getMyProfile = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+
+
+    const profile = await userService.getMyProfile(req?.user?.email as string , req?.user?.id as string)
+
+    sendResponse(res , {
+        statusCode : httpStatus.OK , 
+        success : true , 
+        message : 'user profile',
+        data : profile
+    })
+})
+
+
+const updateProfile = catchAsync(async (req : Request , res : Response , next : NextFunction)=>{
+
+    const userId = req?.user?.id as string 
+    const payload = req.body 
+    const result = await userService.updateProfile(userId , payload)
+
+    sendResponse(res , {
+        success : true , 
+        message : 'Profile update successfully!' , 
+        data : result ,  
+        statusCode : httpStatus.OK
+    })
+})
+
+
+
 export const userController = {
-    register
+    register,
+    getMyProfile, 
+    updateProfile
 }
