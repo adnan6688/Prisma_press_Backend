@@ -1,6 +1,4 @@
 
-
-
 const createPost = async () => {
 
 
@@ -16,6 +14,7 @@ const allPosts = async () => {
 
 }
 
+
 const updatePost = async () => {
 
 }
@@ -24,6 +23,7 @@ const updatePost = async () => {
 const deletePost = async () => {
 
 }
+
 
 export const postService = {
     createPost,

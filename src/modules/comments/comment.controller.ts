@@ -1,4 +1,3 @@
-
 import { catchAsync } from "../../utils/catchAsync";
 import { NextFunction, Request, Response } from "express";
 
