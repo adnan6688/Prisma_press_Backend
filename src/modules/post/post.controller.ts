@@ -34,7 +34,18 @@ const allPost = catchAsync(async (req: Request, res: Response, next: NextFunctio
 
 
 const updatePost = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const authorId = req?.user?.id as string
+    const isAdmin = req?.user?.role === "ADMIN"
+    const payload = req.body
+    const postId = req.params.postId as string
+    const data = await postService.updatePost(postId, payload, authorId, isAdmin)
 
+    sendResponse(res, {
+        data,
+        success: true,
+        message: 'post update successfully!',
+        statusCode: httpStatus.OK
+    })
 })
 
 
@@ -71,11 +82,31 @@ const postDetails = catchAsync(async (req: Request, res: Response, next: NextFun
     })
 })
 
+
+const deletePost = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+
+    const authorId = req?.user?.id as string
+    const isAdmin = req?.user?.role === "ADMIN"
+    const postId = req.params.postId as string
+    if (!postId) {
+        throw new Error("Post id must be included!")
+    }
+    const data = await postService.deletePost(postId, authorId, isAdmin)
+
+    sendResponse(res, {
+        data,
+        success: true,
+        message: 'post update successfully!',
+        statusCode: httpStatus.OK
+    })
+})
+
 export const postController = {
     createPost,
     allPost,
     getPostStats,
     updatePost,
     myPosts,
-    postDetails
+    postDetails,
+    deletePost
 }
