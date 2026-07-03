@@ -179,7 +179,7 @@ const deletePost = async (postId: string, authorId: string, isAdmin: boolean) =>
 const getPostStats = async () => {
 
 
-    
+
     const transactionResult = await prisma.$transaction(async (tx) => {
         const [
             totalPost,
