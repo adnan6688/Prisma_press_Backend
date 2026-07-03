@@ -49,10 +49,7 @@ const updatePost = catchAsync(async (req: Request, res: Response, next: NextFunc
 })
 
 
-const getPostStats = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 
-
-})
 
 
 const myPosts = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -97,6 +94,19 @@ const deletePost = catchAsync(async (req: Request, res: Response, next: NextFunc
         data,
         success: true,
         message: 'post update successfully!',
+        statusCode: httpStatus.OK
+    })
+})
+
+
+const getPostStats = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+
+    const data = await postService.getPostStats()
+
+    sendResponse(res, {
+        data,
+        success: true,
+        message: "post stats",
         statusCode: httpStatus.OK
     })
 })

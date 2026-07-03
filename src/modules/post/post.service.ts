@@ -1,3 +1,4 @@
+import { CommentStatus, PostStatus } from "../../../generated/prisma/enums"
 import { prisma } from "../../lib/prisma"
 import { IcreatepostPayload, IUpdatePostPayload } from "./post.interface"
 
@@ -16,41 +17,47 @@ const createPost = async (payload: IcreatepostPayload, userId: string) => {
 
 const postDetails = async (postId: string) => {
 
-    await prisma.post.findUniqueOrThrow({
-        where: {
-            id: postId
-        },
-        include: {
-            author: {
-                omit: {
-                    password: true,
-                    createdAt: true,
-                    updatedAt: true,
-                    role: true,
-                    activeStatus: true
-                }
-            }
-        }
-    })
 
-    const updatedPost = await prisma.post.update({
-        where: {
-            id: postId
-        }, data: {
-            views: {
-                increment: 1
-            }
-        }, include: {
-            author: {
-                omit: {
-                    password: true
+    const transectionResult = await prisma.$transaction(
+        async (tx) => {
+            await tx.post.update({
+                where: {
+                    id: postId
+                }, data: {
+                    views: {
+                        increment: 1
+                    }
                 }
-            },
-            comments: true
-        }
-    })
+            });
 
-    return updatedPost
+            const post = await prisma.post.findUniqueOrThrow({
+                where: {
+                    id: postId
+                },
+                include: {
+                    author: {
+                        omit: {
+                            password: true,
+                            createdAt: true,
+                            updatedAt: true,
+                            role: true,
+                            activeStatus: true
+                        }
+                    },
+                    _count: {
+                        select: {
+                            comments: true
+                        }
+                    }
+                },
+
+            });
+
+            return post
+
+        }
+    )
+    return transectionResult
 
 }
 
@@ -107,6 +114,8 @@ const myPosts = async (userId: string) => {
             createdAt: "desc",
         },
     });
+
+
 
 
     return data
@@ -166,11 +175,84 @@ const deletePost = async (postId: string, authorId: string, isAdmin: boolean) =>
 }
 
 
+
+const getPostStats = async () => {
+
+
+    
+    const transactionResult = await prisma.$transaction(async (tx) => {
+        const [
+            totalPost,
+            totalPublishedPost,
+            totalDraft,
+            totalArchivedPost,
+            totalComments,
+            totalApprovedComments,
+            totalRejectedComments,
+            totalViewsResult,
+        ] = await Promise.all([
+            tx.post.count(),
+
+            tx.post.count({
+                where: {
+                    status: PostStatus.PUBLISHED,
+                },
+            }),
+
+            tx.post.count({
+                where: {
+                    status: PostStatus.DRAFT,
+                },
+            }),
+
+            tx.post.count({
+                where: {
+                    status: PostStatus.ARCHIVED,
+                },
+            }),
+
+            tx.comment.count(),
+
+            tx.comment.count({
+                where: {
+                    status: CommentStatus.APPROVED,
+                },
+            }),
+
+            tx.comment.count({
+                where: {
+                    status: CommentStatus.REJECCT,
+                },
+            }),
+
+            tx.post.aggregate({
+                _sum: {
+                    views: true,
+                },
+            }),
+        ]);
+
+        return {
+            totalPost,
+            totalPublishedPost,
+            totalDraft,
+            totalArchivedPost,
+            totalComments,
+            totalApprovedComments,
+            totalRejectedComments,
+            totalViews: totalViewsResult._sum.views ?? 0,
+        };
+    });
+
+    return transactionResult;
+};
+
 export const postService = {
     createPost,
     postDetails,
     allPosts,
     updatePost,
     deletePost,
-    myPosts
+    myPosts,
+    getPostStats
 }
