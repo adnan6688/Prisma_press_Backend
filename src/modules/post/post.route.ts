@@ -9,12 +9,12 @@ const route = Router()
 
 route.post('/', auth(...Object.values(UserRole)), postController.createPost)
 
-
 route.get('/', postController.allPost)
-
 
 route.get('/stats', auth(...Object.values(UserRole)), postController.getPostStats)
 
-route.get('my-posts', auth(...Object.values(UserRole)), postController.myPosts)
+route.get('/my_posts', auth(...Object.values(UserRole)), postController.myPosts)
+
+route.get('/:postId' , postController.postDetails)
 
 export const postRoutes = route

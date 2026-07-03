@@ -3,10 +3,6 @@ import httpStatus from 'http-status'
 import { userService } from "./users.service";
 import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
-import config from "../../config";
-import { jwtUtils } from "../../utils/jwt";
-import { JwtPayload } from "jsonwebtoken";
-
 
 const register = async (req: Request, res: Response) => {
 

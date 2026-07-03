@@ -1,5 +1,5 @@
 model Post {
-    id String @id @default(ulid())
+    id         String     @id @default(ulid())
     title      String     @db.VarChar(255)
     content    String     @db.Text()
     thumbnail  String?

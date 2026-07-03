@@ -4,6 +4,8 @@ import config from "../../config"
 import { RegisterUserPayload } from "./user.interface"
 
 
+
+
 const register = async (payload: RegisterUserPayload) => {
 
     const { name, email, password, profilePhoto } = payload
@@ -49,8 +51,6 @@ const register = async (payload: RegisterUserPayload) => {
 
     return getUser
 }
-
-
 
 const getMyProfile = async (email: string, id: string) => {
 
