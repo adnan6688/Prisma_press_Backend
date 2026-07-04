@@ -66,6 +66,28 @@ const allPosts = async () => {
 
     const posts = await prisma.post.findMany(
         {
+
+
+
+            // searching / partial match
+            where: {
+                OR: [
+                    {
+                        title: {
+                            contains: "POST",
+                            mode: "insensitive"
+                        }
+                    }, {
+
+                        content: {
+                            contains: "RE",
+                            mode: "insensitive"
+                        }
+                    }
+                ]
+            },
+
+
             include: {
                 author: {
                     omit: {
