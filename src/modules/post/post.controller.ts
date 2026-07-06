@@ -22,7 +22,11 @@ const createPost = catchAsync(async (req: Request, res: Response, next: NextFunc
 
 const allPost = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 
-    const data = await postService.allPosts()
+    const query = req.query
+
+    
+
+    const data = await postService.allPosts(query)
 
     sendResponse(res, {
         data,
