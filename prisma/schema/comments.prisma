@@ -16,3 +16,5 @@ model Comment {
     @@index([authorId])
     @@map("comments")
 }
+
+

@@ -13,9 +13,9 @@ const register = async (payload: RegisterUserPayload) => {
     const isUserExits = await prisma.user.findUnique({
         where: { email }
     })
-    if (isUserExits) {
-        throw new Error('User With this email already exists')
-    }
+    // if (isUserExits) {
+    //     throw new Error('User With this email already exists')
+    // }
     const hasedPassword = await bcrypt.hash(password, Number(config.bcrypt_salt_rounds))
 
 

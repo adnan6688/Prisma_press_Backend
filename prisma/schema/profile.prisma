@@ -4,7 +4,7 @@ model Profile {
     profilePhoto String?
 
     userId String @unique
-    user   User   @relation(fields: [userId], references: [id])
+    user   User   @relation(fields: [userId], references: [id],onDelete: Cascade)
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -12,3 +12,5 @@ model Profile {
 
     @@map("profiles")
 }
+
+

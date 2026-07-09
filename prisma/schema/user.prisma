@@ -11,6 +11,8 @@ model User {
 
 
     profile  Profile?
+    subscription SubsCription?
+    
     comments Comment[]
     posts    Post[]
 

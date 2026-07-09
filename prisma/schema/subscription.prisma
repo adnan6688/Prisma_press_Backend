@@ -1,0 +1,18 @@
+
+
+model SubsCription {
+    id String @id  @default(ulid())
+
+    userId String @unique 
+    user User @relation(fields: [userId] , references: [id] , onDelete: Cascade)
+
+    currentPeriodEnd DateTime 
+    status SubsCriptionStatus @default(ACTIVE)
+
+
+    stripeCustomarId String
+    stripeSubscriptionId String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime
+}

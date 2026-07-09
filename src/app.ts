@@ -8,8 +8,8 @@ import { AuthRoutes } from "./modules/auth/auth.routes";
 import { postRoutes } from "./modules/post/post.route";
 import { commentRoutes } from "./modules/comments/comments.route";
 import { NotFound } from "./middlewares/notFound";
-import httpStatus from 'http-status'
 import { GlobalErrorHandler } from "./middlewares/globalErrorHandler";
+import { subsCriptionRoutes } from "./modules/Subscription/subscription.route";
 
 
 app.use(express.json())
@@ -31,6 +31,7 @@ app.use('/api/user', userRoutes)
 app.use('/api/auth', AuthRoutes)
 app.use('/api/posts', postRoutes)
 app.use('/api/comments', commentRoutes)
+app.use('/api/subscription' , subsCriptionRoutes)
 
 
 

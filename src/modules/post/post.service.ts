@@ -17,7 +17,6 @@ const createPost = async (payload: IcreatepostPayload, userId: string) => {
 
 }
 
-
 const postDetails = async (postId: string) => {
 
 
@@ -64,13 +63,6 @@ const postDetails = async (postId: string) => {
 
 }
 
-
-
-
-
-
-
-
 const allPosts = async (query: IpostQuery) => {
 
 
@@ -115,6 +107,9 @@ const allPosts = async (query: IpostQuery) => {
             title: query.title
         })
     }
+
+
+
     if (query.content) {
         andCodintions.push({
             content: query.content
@@ -127,6 +122,8 @@ const allPosts = async (query: IpostQuery) => {
             authorId: query.authorId
         })
     }
+
+
     if (query.isFeatured) {
         andCodintions.push({
             isFeatured: Boolean(query.isFeatured)
@@ -213,11 +210,14 @@ const allPosts = async (query: IpostQuery) => {
             omit: {
                 authorId: true
             },
+
+
+
             // dynamic paginations
             take: limit,
             skip: skip,
             orderBy: {
-                // sortby : sortOrder
+
                 [sortBy]: sortOrder
             },
 
@@ -226,7 +226,6 @@ const allPosts = async (query: IpostQuery) => {
     )
     return posts
 }
-
 
 const myPosts = async (userId: string) => {
 
@@ -256,8 +255,6 @@ const myPosts = async (userId: string) => {
 
     return data
 }
-
-
 
 const updatePost = async (postId: string, payLoad: IUpdatePostPayload, authorId: string, isAdmin: boolean) => {
 
@@ -290,7 +287,6 @@ const updatePost = async (postId: string, payLoad: IUpdatePostPayload, authorId:
     return result
 }
 
-
 const deletePost = async (postId: string, authorId: string, isAdmin: boolean) => {
 
     const post = await prisma.post.findUniqueOrThrow({
@@ -310,8 +306,6 @@ const deletePost = async (postId: string, authorId: string, isAdmin: boolean) =>
     })
     return null
 }
-
-
 
 const getPostStats = async () => {
 
